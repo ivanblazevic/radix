@@ -1,0 +1,1 @@
+cd radix && npm start
