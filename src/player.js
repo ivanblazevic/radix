@@ -10,7 +10,7 @@ class Player {
                 "version": this.config.getVersion(),
                 "playing": this.config.getStreamingUrl(),
                 "title": this.config.getTitle(),
-                "volume": this.config.getVolume(),
+                "volume": this.config.getVolume() || 0,
                 "google_username": this.config.getGoogleUsername(),
                 "google_password": this.config.getGooglePassword(),
                 "dirble_token": this.config.getDirbleToken()
@@ -18,10 +18,9 @@ class Player {
         };
         this.play = (streamUrl, title) => {
             if (this.config.isMpv()) {
-                return common_1.run("mpv " + streamUrl, true).pipe(operators_1.tap(r => {
+                return common_1.run("mpva " + streamUrl, true).pipe(operators_1.tap(r => {
                     this.config.setStreamingUrl(streamUrl);
                     this.config.setTitle(title);
-                    console.log("allll");
                 }));
             }
             else {

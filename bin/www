@@ -9,7 +9,7 @@ var http = require("http");
 var fs = require("fs");
 var httpProxy = require('http-proxy');
 
-console.log("al", process.env.PORT)
+console.log("Starting server on port: ", process.env.PORT)
 
 //get port from environment and store in Express.
 var port = normalizePort(process.env.PORT || 8080);

@@ -17,7 +17,7 @@ export class Player {
 			"version": this.config.getVersion(),
 			"playing": this.config.getStreamingUrl(), 
 			"title": this.config.getTitle(),
-			"volume": this.config.getVolume(),
+			"volume": this.config.getVolume() || 0,
 			"google_username": this.config.getGoogleUsername(),
 			"google_password": this.config.getGooglePassword(),
 			"dirble_token": this.config.getDirbleToken()
@@ -26,11 +26,10 @@ export class Player {
 
 	play = (streamUrl: string, title?: string): Observable<any> => {
 		if (this.config.isMpv()) {
-			return run("mpv " + streamUrl, true).pipe(
+			return run("mpva " + streamUrl, true).pipe(
 				tap(r => {
 					this.config.setStreamingUrl(streamUrl);
 					this.config.setTitle(title);
-					console.log("allll")
 				})
 			)
 		} else {
