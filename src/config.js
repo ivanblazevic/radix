@@ -14,7 +14,7 @@ class Config {
         return o.version;
     }
     getVolume() {
-        return nconf.get('volume');
+        return +nconf.get('volume');
     }
     getStreamingUrl() {
         return nconf.get('url');

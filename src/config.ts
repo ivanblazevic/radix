@@ -15,8 +15,8 @@ export class Config {
         return o.version;
     }
 
-    getVolume(): string {
-        return nconf.get('volume');
+    getVolume(): number {
+        return +nconf.get('volume');
     }
 
     getStreamingUrl(): string {
