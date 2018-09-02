@@ -113,7 +113,7 @@ export class Config {
     }
 
     private save() {
-        nconf.save(function (err) {
+        nconf.save(err => {
             fs.readFile(this.configPath, function (err, data) {});
         });
     }

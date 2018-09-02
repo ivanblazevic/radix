@@ -96,7 +96,7 @@ class Config {
         return nconf.get('executor') === "mpv";
     }
     save() {
-        nconf.save(function (err) {
+        nconf.save(err => {
             fs.readFile(this.configPath, function (err, data) { });
         });
     }
