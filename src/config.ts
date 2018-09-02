@@ -1,10 +1,10 @@
 import * as nconf from 'nconf';
 import * as fs from 'fs';
+import * as path from 'path';
 
 export class Config {
-
-    private configPath = '../config.json';
-    private packagePath = '../package.json';
+    private configPath = path.join(__dirname, './../config.json');
+    private packagePath = path.join(__dirname, './../package.json');
 
     constructor() {
         nconf.argv()

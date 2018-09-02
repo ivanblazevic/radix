@@ -2,10 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const nconf = require("nconf");
 const fs = require("fs");
+const path = require("path");
 class Config {
     constructor() {
-        this.configPath = '../config.json';
-        this.packagePath = '../package.json';
+        this.configPath = path.join(__dirname, './../config.json');
+        this.packagePath = path.join(__dirname, './../package.json');
         nconf.argv()
             .env()
             .file({ file: this.configPath });
