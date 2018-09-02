@@ -1,4 +1,3 @@
-/// <reference path="_all.d.ts" />
 "use strict";
 import * as bodyParser from "body-parser";
 import * as express from "express";
@@ -7,7 +6,6 @@ import * as indexRoute from "./routes/index";
 import * as googleMusicPlayRoute from "./routes/google-music-play";
 import { Config } from "./config";
 import { Player } from "./player";
-import * as child_process from "child_process";
 
 /**
  * The server.

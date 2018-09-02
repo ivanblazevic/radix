@@ -1,9 +1,7 @@
-/// <reference path="../_all.d.ts" />
 "use strict";
 import * as express from "express";
 import { Player } from "../player";
 import * as child_process from "child_process";
-import * as YouTubePlayer from 'youtube-player';
 import { Observable } from "rxjs/Observable";
 import { Config } from "../config";
 var request = require('request');

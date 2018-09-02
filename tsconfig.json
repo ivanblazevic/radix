@@ -3,10 +3,13 @@
         "target": "es6",
         "module": "commonjs",
         "sourceMap": false,
+        "outDir": "dist"
+        /*
         "noLib": true,
         "lib": [
             "es6",
             "dom"
         ],
+        */
     }
 }
