@@ -135,7 +135,6 @@ class Server {
         var index = new indexRoute.Index();
         //home page
         router.post("/", index.saveConfig.bind(index.saveConfig));
-        router.get("/", index.index.bind(index.index));
         router.get("/info", index.index.bind(index.index));
         router.get("/available_version", index.available_version.bind(index.available_version));
         router.get("/update", index.update.bind(index.update));
