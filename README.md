@@ -11,11 +11,12 @@ Download DietPi / Recommended Etcher for flashing SD card > and flash your SD ca
 ## Installation
 - connect to wifi
 - dietpi-config -> 9. autostart options -> automatic login (recommended) 
-- add radix in etc/rc.local before exit:
-    cd /root/radix && npm start
-    exit 0
 - dietpi-software -> install nodeJS
 - npm install -g radix-player
+- radix-install
+- add radix in etc/rc.local before exit:
+    radix
+    exit 0
 - (optional) configure USB audio card if you use one using dietpi-config
 
 ## Optional: Update to latest version
