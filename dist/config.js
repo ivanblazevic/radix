@@ -9,7 +9,18 @@ class Config {
         this.packagePath = path.join(__dirname, './../package.json');
         nconf.argv()
             .env()
-            .file({ file: this.configPath });
+            .file({ file: this.configPath + "a" });
+        if (!nconf.get('url')) {
+            fs.writeFile(this.configPath + "a", "", function (err) {
+                if (err) {
+                    return console.log(err);
+                }
+            });
+            nconf.set('executor', "mpc");
+            nconf.set('url', "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3");
+            nconf.set('title', "AlternativeFM ");
+            this.save();
+        }
     }
     getVersion() {
         var content = fs.readFileSync(this.packagePath, 'utf8');
