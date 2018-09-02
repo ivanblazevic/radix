@@ -25,7 +25,7 @@ var Route;
             };
             this.available_version = (req, res, next) => {
                 this.config.getAvailableVersion().subscribe(r => {
-                    res.end(r);
+                    res.send(JSON.stringify(r));
                 });
             };
             this.saveConfig = (req, res, next) => {

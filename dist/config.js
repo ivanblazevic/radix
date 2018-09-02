@@ -45,7 +45,9 @@ class Config {
                     const b = JSON.parse(body);
                     observer.next(b["dist-tags"].latest);
                 }
-                observer.next("Executing: ");
+                else {
+                    observer.next("Executing: ");
+                }
                 observer.complete();
             });
         });

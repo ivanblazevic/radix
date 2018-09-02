@@ -34,7 +34,7 @@ module Route {
 
     public available_version = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
       this.config.getAvailableVersion().subscribe(r => {
-        res.end(r);
+        res.send(JSON.stringify(r));
       })
     }
 

@@ -46,8 +46,9 @@ export class Config {
                     if (!error && response.statusCode == 200) {
                         const b = JSON.parse(body);
                         observer.next(b["dist-tags"].latest);
+                    } else {
+                        observer.next("Executing: ");
                     }
-                    observer.next("Executing: ");
                     observer.complete();
                 }
             );
