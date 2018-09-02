@@ -5,7 +5,6 @@
   "main": "Radix",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "npm version patch",
     "start": "node ./bin/www"
   },
   "bin": {
