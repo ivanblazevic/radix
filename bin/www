@@ -2,7 +2,7 @@
 "use strict";
 
 //module dependencies.
-var s = require("../src/server");
+var s = require("../dist/server");
 var app = s.app;
 var http = require("http");
 

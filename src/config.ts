@@ -12,6 +12,7 @@ export class Config {
     getVersion(): string {
         var content = fs.readFileSync('../package.json', 'utf8');
         var o = JSON.parse(content);
+        console.log(o);
         return o.version;
     }
 
