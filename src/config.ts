@@ -9,9 +9,9 @@ export class Config {
     constructor() {
         nconf.argv()
         .env()
-        .file({ file: this.configPath+"a" });
+        .file({ file: this.configPath });
         if (!nconf.get('url')) {
-            fs.writeFile(this.configPath+"a", "", function(err) {
+            fs.writeFile(this.configPath, "", function(err) {
                 if(err) {
                     return console.log(err);
                 }

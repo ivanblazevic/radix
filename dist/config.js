@@ -9,9 +9,9 @@ class Config {
         this.packagePath = path.join(__dirname, './../package.json');
         nconf.argv()
             .env()
-            .file({ file: this.configPath + "a" });
+            .file({ file: this.configPath });
         if (!nconf.get('url')) {
-            fs.writeFile(this.configPath + "a", "", function (err) {
+            fs.writeFile(this.configPath, "", function (err) {
                 if (err) {
                     return console.log(err);
                 }
