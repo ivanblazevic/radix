@@ -4,12 +4,14 @@ const nconf = require("nconf");
 const fs = require("fs");
 class Config {
     constructor() {
+        this.configPath = '../config.json';
+        this.packagePath = '../package.json';
         nconf.argv()
             .env()
-            .file({ file: 'config.json' });
+            .file({ file: this.configPath });
     }
     getVersion() {
-        var content = fs.readFileSync('package.json', 'utf8');
+        var content = fs.readFileSync(this.packagePath, 'utf8');
         var o = JSON.parse(content);
         return o.version;
     }
@@ -60,7 +62,7 @@ class Config {
     }
     save() {
         nconf.save(function (err) {
-            fs.readFile('config.json', function (err, data) { });
+            fs.readFile(this.configPath, function (err, data) { });
         });
     }
 }
