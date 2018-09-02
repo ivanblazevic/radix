@@ -6,10 +6,10 @@ class Config {
     constructor() {
         nconf.argv()
             .env()
-            .file({ file: 'config.json' });
+            .file({ file: '../config.json' });
     }
     getVersion() {
-        var content = fs.readFileSync('package.json', 'utf8');
+        var content = fs.readFileSync('../package.json', 'utf8');
         var o = JSON.parse(content);
         return o.version;
     }
@@ -60,7 +60,7 @@ class Config {
     }
     save() {
         nconf.save(function (err) {
-            fs.readFile('config.json', function (err, data) { });
+            fs.readFile('../config.json', function (err, data) { });
         });
     }
 }

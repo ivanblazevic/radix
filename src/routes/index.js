@@ -11,7 +11,7 @@ var Route;
         constructor() {
             this.player = new player_1.Player();
             this.update = (req, res, next) => {
-                child_process.exec('cd .. && ./update.sh', (err, stdout) => {
+                child_process.exec('npm install -g radix-player@latest', (err, stdout) => {
                     if (err) {
                         res.send(JSON.stringify(err));
                     }
