@@ -14,7 +14,8 @@ Supports:
 - dietpi-software -> install nodeJS
 - configure USB audio card if you use one
 ## run this commands in root directory
-- wget https://raw.githubusercontent.com/ivanblazevic/radix/master/install.sh
+- wget https://bit.ly/2HF3mHC -O install.sh 
+    (in case if it is not working: wget https://raw.githubusercontent.com/ivanblazevic/radix/master/install.sh)
 - chmod +x install.sh
 - run install.sh inside root
 
