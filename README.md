@@ -1,6 +1,6 @@
 Radix is node server music streamer with web interface for control.
 Supports:
-- web streaming
+- Internet radio streaming
 - YouTube
 - Google Music Play
 
