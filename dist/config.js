@@ -11,7 +11,7 @@ class Config {
         this.packagePath = path.join(__dirname, './../package.json');
         const config = this.configPath;
         const defaultConfig = {
-            "executor": "mpv",
+            "executor": "mpc",
             "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
             "title": "AlternativeFM"
         };

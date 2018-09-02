@@ -25,13 +25,14 @@ export class Player {
 
 	play = (streamUrl: string, title?: string): Observable<any> => {
 		if (this.config.isMpv()) {
-			return run("mpva " + streamUrl, true).pipe(
+			return run("mpv " + streamUrl, true).pipe(
 				tap(r => {
 					this.config.setStreamingUrl(streamUrl);
 					this.config.setTitle(title);
 				})
 			)
 		} else {
+			console.log('mpc add "' + streamUrl + '"')
 			return run("mpc clear").pipe(
 				switchMap(r => run('mpc add "' + streamUrl + '"')),
 				switchMap(r => run("mpc play")),

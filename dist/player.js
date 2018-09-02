@@ -18,12 +18,13 @@ class Player {
         };
         this.play = (streamUrl, title) => {
             if (this.config.isMpv()) {
-                return common_1.run("mpva " + streamUrl, true).pipe(operators_1.tap(r => {
+                return common_1.run("mpv " + streamUrl, true).pipe(operators_1.tap(r => {
                     this.config.setStreamingUrl(streamUrl);
                     this.config.setTitle(title);
                 }));
             }
             else {
+                console.log('mpc add "' + streamUrl + '"');
                 return common_1.run("mpc clear").pipe(operators_1.switchMap(r => common_1.run('mpc add "' + streamUrl + '"')), operators_1.switchMap(r => common_1.run("mpc play")), operators_1.tap(r => {
                     this.config.setStreamingUrl(streamUrl);
                     this.config.setTitle(title);
