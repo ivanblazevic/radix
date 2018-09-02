@@ -1,6 +1,6 @@
 {
   "name": "radix-player",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Internet Radio Streamer",
   "main": "Radix",
   "scripts": {
