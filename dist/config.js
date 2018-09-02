@@ -18,7 +18,7 @@ class Config {
             });
             nconf.set('executor', "mpc");
             nconf.set('url', "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3");
-            nconf.set('title', "AlternativeFM ");
+            nconf.set('title', "AlternativeFM");
             this.save();
         }
     }
