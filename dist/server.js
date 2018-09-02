@@ -109,10 +109,8 @@ class Server {
             }
         };
         this.app.use(allowCrossDomain);
-        //this.app.use(express.static('www'));
         //add static paths
-        this.app.use(express.static(path.join("www")));
-        //this.app.use(express.static(path.join(__dirname, "bower_components")));
+        this.app.use(express.static(path.join(__dirname, './../www')));
         // catch 404 and forward to error handler
         this.app.use(function (err, req, res, next) {
             var error = new Error("Not Found");

@@ -18,6 +18,7 @@ module Route {
     }
 
     public update = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+      console.log("Update process started...");
       child_process.exec('radix-update', (err, stdout) => {
         if (err) {
           res.send(JSON.stringify(err));

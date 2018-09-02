@@ -10,6 +10,7 @@ var Route;
         constructor() {
             this.player = new player_1.Player();
             this.update = (req, res, next) => {
+                console.log("Update process started...");
                 child_process.exec('radix-update', (err, stdout) => {
                     if (err) {
                         res.send(JSON.stringify(err));
