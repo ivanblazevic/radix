@@ -8,7 +8,7 @@ class Player {
         this.info = () => {
             return {
                 "version": this.config.getVersion(),
-                "playing": this.config.getStreamingUrl(),
+                "url": this.config.getStreamingUrl(),
                 "title": this.config.getTitle(),
                 "volume": this.config.getVolume() || 0,
                 "google_username": this.config.getGoogleUsername(),
