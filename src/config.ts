@@ -1,6 +1,8 @@
 import * as nconf from 'nconf';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Observable } from 'rxjs/Observable';
+import * as request from 'request';
 
 export class Config {
     private configPath = path.join(__dirname, './../config.json');
@@ -35,6 +37,21 @@ export class Config {
         var content = fs.readFileSync(this.packagePath, 'utf8');
         var o = JSON.parse(content);
         return o.version;
+    }
+
+    getAvailableVersion(): Observable<string> {
+        return new Observable(observer => {
+            request.get('https://registry.npmjs.org/radix-player',
+                function (error, response, body) {                
+                    if (!error && response.statusCode == 200) {
+                        const b = JSON.parse(body);
+                        observer.next(b["dist-tags"].latest);
+                    }
+                    observer.next("Executing: ");
+                    observer.complete();
+                }
+            );
+        })
     }
 
     getVolume(): number {

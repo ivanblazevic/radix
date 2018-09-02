@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const nconf = require("nconf");
 const fs = require("fs");
 const path = require("path");
+const Observable_1 = require("rxjs/Observable");
+const request = require("request");
 class Config {
     constructor() {
         this.configPath = path.join(__dirname, './../config.json');
@@ -35,6 +37,18 @@ class Config {
         var content = fs.readFileSync(this.packagePath, 'utf8');
         var o = JSON.parse(content);
         return o.version;
+    }
+    getAvailableVersion() {
+        return new Observable_1.Observable(observer => {
+            request.get('https://registry.npmjs.org/radix-player', function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    const b = JSON.parse(body);
+                    observer.next(b["dist-tags"].latest);
+                }
+                observer.next("Executing: ");
+                observer.complete();
+            });
+        });
     }
     getVolume() {
         return +nconf.get('volume');

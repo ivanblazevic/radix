@@ -22,6 +22,11 @@ var Route;
             this.index = (req, res, next) => {
                 res.send(JSON.stringify(this.player.info()));
             };
+            this.available_version = (req, res, next) => {
+                this.config.getAvailableVersion().subscribe(r => {
+                    res.end(r);
+                });
+            };
             this.saveConfig = (req, res, next) => {
                 this.config.setGoogleUsername(req.body.google_username);
                 this.config.setGooglePassword(req.body.google_password);

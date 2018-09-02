@@ -31,6 +31,12 @@ module Route {
       res.send(JSON.stringify(this.player.info()));
     }
 
+    public available_version = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+      this.config.getAvailableVersion().subscribe(r => {
+        res.end(r);
+      })
+    }
+
     public saveConfig = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
       this.config.setGoogleUsername(req.body.google_username);
       this.config.setGooglePassword(req.body.google_password);
