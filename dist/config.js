@@ -7,20 +7,29 @@ class Config {
     constructor() {
         this.configPath = path.join(__dirname, './../config.json');
         this.packagePath = path.join(__dirname, './../package.json');
-        nconf.argv()
-            .env()
-            .file({ file: this.configPath });
-        if (!nconf.get('url')) {
-            fs.writeFile(this.configPath, "", function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-            });
-            nconf.set('executor', "mpc");
-            nconf.set('url', "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3");
-            nconf.set('title', "AlternativeFM");
-            this.save();
-        }
+        const config = this.configPath;
+        const defaultConfig = {
+            "executor": "mpv",
+            "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
+            "title": "AlternativeFM"
+        };
+        fs.readFile(config, "utf8", function (err, file) {
+            if (err) {
+                fs.writeFile(config, JSON.stringify(defaultConfig), function (err) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    nconf.argv()
+                        .env()
+                        .file({ file: config });
+                });
+            }
+            else {
+                nconf.argv()
+                    .env()
+                    .file({ file: config });
+            }
+        });
     }
     getVersion() {
         var content = fs.readFileSync(this.packagePath, 'utf8');
