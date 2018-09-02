@@ -1,6 +1,5 @@
 import { Observable } from "rxjs/Observable";
 import { switchMap, tap } from "rxjs/operators"
-import * as child_process from "child_process";
 import { Config } from "./config";
 import { run } from "./common";
 
