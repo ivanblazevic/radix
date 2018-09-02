@@ -10,6 +10,7 @@
   },
   "bin": {
     "radix-install": "./install.js",
+    "radix-update": "./update.js",
     "radix": "./bin/www"
   },
   "keywords": [

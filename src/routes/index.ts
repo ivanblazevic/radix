@@ -20,7 +20,7 @@ module Route {
     }
 
     public update = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      child_process.exec('npm install -g radix-player@latest', (err, stdout) => {
+      child_process.exec('radix-update', (err, stdout) => {
         if (err) {
           res.send(JSON.stringify(err));
         } else {
