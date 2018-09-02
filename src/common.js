@@ -6,7 +6,7 @@ function run(command, sync) {
     if (sync) {
         const proc = child_process.exec(command);
         return new Observable_1.Observable(observer => {
-            observer.next("proc");
+            observer.next("Executing: " + command);
             observer.complete();
         });
     }

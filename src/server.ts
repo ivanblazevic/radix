@@ -161,6 +161,7 @@ class Server {
 
     //home page
     router.post("/", index.saveConfig.bind(index.saveConfig));
+    router.get("/", index.index.bind(index.index));
     router.get("/info", index.index.bind(index.index));
     router.get("/update", index.update.bind(index.update));
     router.get("/play", index.play.bind(index.play));

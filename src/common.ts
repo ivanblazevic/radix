@@ -5,7 +5,7 @@ export function run(command: string, sync?: boolean): Observable<any> {
     if (sync) {
         const proc = child_process.exec(command);
         return new Observable(observer => {
-            observer.next("proc");
+            observer.next("Executing: " + command);
             observer.complete();
         })
     } else {
