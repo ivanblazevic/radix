@@ -1,8 +1,0 @@
-{
-  "osx_mpv": {
-    "play": "mpv"
-  },
-  "raspberry": {
-    "play": "mpd"
-  }
-}

@@ -6,18 +6,17 @@ Supports:
 
 # Radix installation on RaspberryPI
 
-## configure dietPI
-- Download DietPi / Recommended Etcher for flashing SD card
-- install DietPI
+Download DietPi / Recommended Etcher for flashing SD card > and flash your SD card (follow installation procedure)
+
+## Installation
 - connect to wifi
-- dietpi-config -> 9. autostart options -> automatic start <<<DOES NOT WORK, why?, put in etc/rc.local instead before exit>>>
+- dietpi-config -> 9. autostart options -> automatic login (recommended) 
+- add radix in etc/rc.local before exit:
+    cd /root/radix && npm start
+    exit 0
 - dietpi-software -> install nodeJS
-- configure USB audio card if you use one
-## run this commands in root directory
-- wget https://bit.ly/2HF3mHC -O install.sh 
-    (in case if it is not working: wget https://raw.githubusercontent.com/ivanblazevic/radix/master/install.sh)
-- chmod +x install.sh
-- run install.sh inside root
+- npm install -g radix-player
+- (optional) configure USB audio card if you use one using dietpi-config
 
 ## Optional: Update to latest version
 - Update to new version will appear in settings of the web interface
