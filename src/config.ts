@@ -63,8 +63,8 @@ export class Config {
         return +volume;
     }
 
-    setVolume(volume: string): void {
-        this.save('volume', volume);
+    setVolume(volume: number): void {
+        this.save('volume', volume.toString());
     }
 
     getStreamingUrl(): string {

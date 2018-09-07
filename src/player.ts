@@ -1,6 +1,5 @@
 import { Observable } from "rxjs/Observable";
-import { switchMap, tap, map } from "rxjs/operators"
-import { combineLatest } from 'rxjs';
+import { switchMap, tap } from "rxjs/operators"
 import { Config } from "./config";
 import { run } from "./common";
 
@@ -22,21 +21,16 @@ export class Player {
 		this.config = new Config();
 	}
 
-	info = (): Observable<any> =>  {
-		const config = combineLatest(this.config.getVolume(), this.config.getVolume());
-		return config.pipe(
-			map(([volume, a]) => {
-				return {
-					"version": this.config.getVersion(),
-					"url": this.config.getStreamingUrl(), 
-					"title": this.config.getTitle(),
-					"volume": volume,
-					"google_username": this.config.getGoogleUsername(),
-					"google_password": this.config.getGooglePassword(),
-					"dirble_token": this.config.getDirbleToken()
-				};
-			})
-		)
+	info = () => {
+		return {
+			"version": this.config.getVersion(),
+			"url": this.config.getStreamingUrl(), 
+			"title": this.config.getTitle(),
+			"volume": this.config.getVolume() || 0,
+			"google_username": this.config.getGoogleUsername(),
+			"google_password": this.config.getGooglePassword(),
+			"dirble_token": this.config.getDirbleToken()
+		}
 	}
 
 	play = (streamUrl: string, title?: string): Observable<any> => {
@@ -60,7 +54,7 @@ export class Player {
 		}
 	}
 
-	volume = (volume: string): Observable<any> => {
+	volume = (volume: number): Observable<any> => {
 		return run("amixer sset '" + this.config.getMixer() + "' " + volume + "%").pipe(
 			tap(r => {
 				this.config.setVolume(volume);
@@ -69,7 +63,7 @@ export class Player {
 	}
 
 	setDefaultVolume(): Observable<any> {
-		return this.config.getVolume().pipe(tap(volume => this.volume(volume)))
+		return this.volume(this.config.getVolume())
     }
 
 }

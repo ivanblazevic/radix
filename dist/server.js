@@ -31,13 +31,12 @@ class Server {
         if (!!url && url.indexOf("googleusercontent") > -1) {
             url = null;
         }
-        var station, title;
+        var title;
         if (!url) {
             url = "http://178.32.62.172:8878/;";
         }
         else {
             url = decodeURI(url);
-            station = url;
             title = this.configuration.getTitle();
         }
         player.setDefaultVolume().subscribe(res => {

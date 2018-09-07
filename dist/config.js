@@ -57,7 +57,7 @@ class Config {
         return +volume;
     }
     setVolume(volume) {
-        this.save('volume', volume);
+        this.save('volume', volume.toString());
     }
     getStreamingUrl() {
         return this.get('url');

@@ -1,24 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const operators_1 = require("rxjs/operators");
-const rxjs_1 = require("rxjs");
 const config_1 = require("./config");
 const common_1 = require("./common");
 class Player {
     constructor() {
         this.info = () => {
-            const config = rxjs_1.combineLatest(this.config.getVolume(), this.config.getVolume());
-            return config.pipe(operators_1.map(([volume, a]) => {
-                return {
-                    "version": this.config.getVersion(),
-                    "url": this.config.getStreamingUrl(),
-                    "title": this.config.getTitle(),
-                    "volume": volume,
-                    "google_username": this.config.getGoogleUsername(),
-                    "google_password": this.config.getGooglePassword(),
-                    "dirble_token": this.config.getDirbleToken()
-                };
-            }));
+            return {
+                "version": this.config.getVersion(),
+                "url": this.config.getStreamingUrl(),
+                "title": this.config.getTitle(),
+                "volume": this.config.getVolume() || 0,
+                "google_username": this.config.getGoogleUsername(),
+                "google_password": this.config.getGooglePassword(),
+                "dirble_token": this.config.getDirbleToken()
+            };
         };
         this.play = (streamUrl, title) => {
             if (this.config.isMpv()) {
@@ -43,7 +39,7 @@ class Player {
         this.config = new config_1.Config();
     }
     setDefaultVolume() {
-        return this.config.getVolume().pipe(operators_1.tap(volume => this.volume(volume)));
+        return this.volume(this.config.getVolume());
     }
 }
 exports.Player = Player;
