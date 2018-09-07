@@ -60,6 +60,7 @@ var Route;
                 this.player.play(station, title).subscribe(r => {
                     res.send(JSON.stringify({ "result": r }));
                 }, err => {
+                    res.status(400);
                     res.send(JSON.stringify({ "error": err.toString() }));
                 });
             };
@@ -84,6 +85,7 @@ var Route;
                 this.player.volume(volume).subscribe(r => {
                     res.send(JSON.stringify({ "result": r }));
                 }, err => {
+                    res.status(400);
                     res.send(JSON.stringify({ "error": err.toString() }));
                 });
             };
