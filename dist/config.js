@@ -5,34 +5,46 @@ const fs = require("fs");
 const path = require("path");
 const Observable_1 = require("rxjs/Observable");
 const request = require("request");
+const tap_1 = require("rxjs/operators/tap");
+const map_1 = require("rxjs/operators/map");
 class Config {
     constructor() {
         this.configPath = path.join(__dirname, './../config.json');
         this.packagePath = path.join(__dirname, './../package.json');
-        const config = this.configPath;
-        const defaultConfig = {
+        this.defaultConfig = {
             "mixer": "PCM",
             "executor": "mpc",
             "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
-            "title": "AlternativeFM"
+            "title": "AlternativeFM",
+            "volume": 50
         };
-        fs.readFile(config, "utf8", function (err, file) {
-            if (err) {
-                fs.writeFile(config, JSON.stringify(defaultConfig), function (err) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    nconf.argv()
-                        .env()
-                        .file({ file: config });
-                });
-            }
-            else {
-                nconf.argv()
-                    .env()
-                    .file({ file: config });
-            }
-        });
+        const config = this.configPath;
+    }
+    init() {
+        return new Observable_1.Observable(observer => {
+            fs.readFile(this.configPath, "utf8", (err, file) => {
+                if (err) {
+                    fs.writeFile(this.configPath, JSON.stringify(this.defaultConfig), function (err) {
+                        if (err) {
+                            observer.error(err);
+                            return console.log(err);
+                        }
+                        observer.next("Config loaded");
+                    });
+                }
+                else {
+                    observer.next("Config loaded");
+                }
+                observer.complete();
+            });
+        }).pipe(tap_1.tap(_ => {
+            nconf.argv()
+                .env()
+                .file({ file: this.configPath });
+        }));
+    }
+    get(param) {
+        return this.init().pipe(map_1.map(_ => nconf.get(param)));
     }
     getVersion() {
         var content = fs.readFileSync(this.packagePath, 'utf8');
@@ -57,7 +69,12 @@ class Config {
         return nconf.get('mixer') || 'PCM';
     }
     getVolume() {
-        return +nconf.get('volume');
+        return this.get('volume').pipe(map_1.map(res => {
+            if (!res) {
+                return 50;
+            }
+            return +res;
+        }));
     }
     setVolume(volume) {
         nconf.set('volume', volume);

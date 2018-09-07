@@ -29,7 +29,9 @@ module Route {
     }
 
     public index = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
-      res.send(JSON.stringify(this.player.info()));
+      this.player.info().subscribe(info => {
+        res.send(JSON.stringify(info));
+      })
     }
 
     public available_version = (req: express.Request, res: express.Response, next: express.NextFunction): void => {

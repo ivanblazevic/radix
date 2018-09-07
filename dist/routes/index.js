@@ -21,7 +21,9 @@ var Route;
                 });
             };
             this.index = (req, res, next) => {
-                res.send(JSON.stringify(this.player.info()));
+                this.player.info().subscribe(info => {
+                    res.send(JSON.stringify(info));
+                });
             };
             this.available_version = (req, res, next) => {
                 this.config.getAvailableVersion().subscribe(r => {

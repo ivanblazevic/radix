@@ -3,35 +3,49 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Observable } from 'rxjs/Observable';
 import * as request from 'request';
+import { tap } from 'rxjs/operators/tap';
+import { map } from 'rxjs/operators/map';
 
 export class Config {
     private configPath = path.join(__dirname, './../config.json');
     private packagePath = path.join(__dirname, './../package.json');
+    private defaultConfig = {
+        "mixer": "PCM",
+        "executor": "mpc",
+        "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
+        "title": "AlternativeFM",
+        "volume": 50
+    }
 
     constructor() {
         const config = this.configPath;
-        const defaultConfig = {
-            "mixer": "PCM",
-            "executor": "mpc",
-            "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
-            "title": "AlternativeFM"
-        }
-        fs.readFile(config, "utf8", function (err, file) {
-            if (err) {
-                fs.writeFile(config, JSON.stringify(defaultConfig), function(err) {
-                    if(err) {
-                        return console.log(err);
-                    }
-                    nconf.argv()
-                    .env()
-                    .file({ file: config });
-                });                
-            } else {
-                nconf.argv()
-                .env()
-                .file({ file: config });
-            }
-        });
+    }
+
+    init(): Observable<any> {
+        return new Observable(observer => {
+            fs.readFile(this.configPath, "utf8", (err, file) => {
+                if (err) {
+                    fs.writeFile(this.configPath, JSON.stringify(this.defaultConfig), function(err) {
+                        if (err) {
+                            observer.error(err);
+                            return console.log(err);
+                        }
+                        observer.next("Config loaded");
+                    });                
+                } else {
+                    observer.next("Config loaded");
+                }
+                observer.complete();
+            });
+        }).pipe(tap(_ => {
+            nconf.argv()
+            .env()
+            .file({ file: this.configPath });
+        }))
+    }
+
+    get(param: string): Observable<any> {
+        return this.init().pipe(map(_ => nconf.get(param)))
     }
 
     getVersion(): string {
@@ -60,8 +74,15 @@ export class Config {
         return nconf.get('mixer') || 'PCM';
     }
 
-    getVolume(): number {
-        return +nconf.get('volume');
+    getVolume(): Observable<any> {
+        return this.get('volume').pipe(
+            map(res => {
+                if (!res) {
+                    return 50;
+                }
+                return +res;
+            })
+        )
     }
 
     setVolume(volume: string): void {
