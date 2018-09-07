@@ -11,6 +11,7 @@ export class Config {
     constructor() {
         const config = this.configPath;
         const defaultConfig = {
+            "mixer": "PCM",
             "executor": "mpc",
             "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
             "title": "AlternativeFM"
@@ -55,8 +56,17 @@ export class Config {
         })
     }
 
+    getMixer(): string {
+        return nconf.get('mixer') || 'PCM';
+    }
+
     getVolume(): number {
         return +nconf.get('volume');
+    }
+
+    setVolume(volume: string): void {
+        nconf.set('volume', volume);
+        this.save();
     }
 
     getStreamingUrl(): string {
@@ -74,11 +84,6 @@ export class Config {
 
     setTitle(title: string): void {
         nconf.set('title', title);
-        this.save();
-    }
-
-    setVolume(volume: string): void {
-        nconf.set('volume', volume);
         this.save();
     }
 

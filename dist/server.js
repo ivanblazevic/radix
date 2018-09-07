@@ -40,8 +40,13 @@ class Server {
             station = url;
             title = this.configuration.getTitle();
         }
+        player.setDefaultVolume().subscribe(res => {
+            console.log(res);
+        }, err => {
+            console.error(err);
+        });
         player.play(url, title).subscribe(res => {
-            // console.log(res);
+            console.log(res);
         }, err => {
             console.error(err);
         });

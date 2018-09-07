@@ -32,11 +32,14 @@ class Player {
             }
         };
         this.volume = (volume) => {
-            return common_1.run("amixer sset 'Speaker' " + volume).pipe(operators_1.tap(r => {
+            return common_1.run("amixer sset '" + this.config.getMixer() + "' " + volume).pipe(operators_1.tap(r => {
                 this.config.setVolume(volume);
             }));
         };
         this.config = new config_1.Config();
+    }
+    setDefaultVolume() {
+        return this.volume(this.config.getVolume().toString());
     }
 }
 exports.Player = Player;

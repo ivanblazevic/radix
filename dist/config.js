@@ -11,6 +11,7 @@ class Config {
         this.packagePath = path.join(__dirname, './../package.json');
         const config = this.configPath;
         const defaultConfig = {
+            "mixer": "PCM",
             "executor": "mpc",
             "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
             "title": "AlternativeFM"
@@ -52,8 +53,15 @@ class Config {
             });
         });
     }
+    getMixer() {
+        return nconf.get('mixer') || 'PCM';
+    }
     getVolume() {
         return +nconf.get('volume');
+    }
+    setVolume(volume) {
+        nconf.set('volume', volume);
+        this.save();
     }
     getStreamingUrl() {
         return nconf.get('url');
@@ -67,10 +75,6 @@ class Config {
     }
     setTitle(title) {
         nconf.set('title', title);
-        this.save();
-    }
-    setVolume(volume) {
-        nconf.set('volume', volume);
         this.save();
     }
     getGoogleUsername() {

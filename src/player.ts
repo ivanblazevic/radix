@@ -45,11 +45,15 @@ export class Player {
 	}
 
 	volume = (volume: string): Observable<any> => {
-		return run("amixer sset 'Speaker' " + volume).pipe(
+		return run("amixer sset '" + this.config.getMixer() + "' " + volume).pipe(
 			tap(r => {
 				this.config.setVolume(volume);
 			})
 		)
 	}
+
+	setDefaultVolume(): Observable<any> {
+        return this.volume(this.config.getVolume().toString());
+    }
 
 }
