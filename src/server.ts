@@ -48,13 +48,12 @@ class Server {
       }
 
       player.setDefaultVolume().subscribe(res => {
-        console.log(res);
-      }, err => {
-        console.error(err)
-      })
-
-      player.play(url, title).subscribe(res => {
-        console.log(res);
+        console.log("Default volume set to: ", res + "%");
+        player.play(url, title).subscribe(res => {
+          console.log(res);
+        }, err => {
+          console.error(err)
+        })
       }, err => {
         console.error(err)
       })
