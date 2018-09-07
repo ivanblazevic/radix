@@ -7,31 +7,26 @@ import * as request from 'request';
 export class Config {
     private configPath = path.join(__dirname, './../config.json');
     private packagePath = path.join(__dirname, './../package.json');
+    private defaultConfig = {
+        "mixer": "PCM",
+        "executor": "mpc",
+        "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
+        "title": "AlternativeFM",
+        "volume": 50
+    }
 
     constructor() {
-        const config = this.configPath;
-        const defaultConfig = {
-            "mixer": "PCM",
-            "executor": "mpc",
-            "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
-            "title": "AlternativeFM"
+        if (!fs.existsSync(this.configPath)) {
+            fs.writeFileSync(this.configPath, JSON.stringify(this.defaultConfig));
         }
-        fs.readFile(config, "utf8", function (err, file) {
-            if (err) {
-                fs.writeFile(config, JSON.stringify(defaultConfig), function(err) {
-                    if(err) {
-                        return console.log(err);
-                    }
-                    nconf.argv()
-                    .env()
-                    .file({ file: config });
-                });                
-            } else {
-                nconf.argv()
-                .env()
-                .file({ file: config });
-            }
-        });
+        nconf
+        .argv()
+        .env()
+        .file({ file: this.configPath });
+    }
+
+    get(param: string): any {
+        return nconf.get(param);
     }
 
     getVersion(): string {
@@ -57,68 +52,67 @@ export class Config {
     }
 
     getMixer(): string {
-        return nconf.get('mixer') || 'PCM';
+        return this.get('mixer') || 'PCM';
     }
 
     getVolume(): number {
-        return +nconf.get('volume');
+        const volume = this.get('volume');
+        if (!volume) {
+            return 50;
+        }
+        return +volume;
     }
 
     setVolume(volume: string): void {
-        nconf.set('volume', volume);
-        this.save();
+        this.save('volume', volume);
     }
 
     getStreamingUrl(): string {
-        return nconf.get('url');
+        return this.get('url');
     }
 
     setStreamingUrl(url: string): void {
-        nconf.set('url', url);
-        this.save();
+        this.save('url', url);
     }
 
     getTitle(): string {
-        return nconf.get('title');
+        return this.get('title');
     }
 
     setTitle(title: string): void {
-        nconf.set('title', title);
-        this.save();
+        this.save('title', title);
     }
 
     getGoogleUsername(): string {
-        return nconf.get('google_username');
+        return this.get('google_username');
     }
 
     setGoogleUsername(value: string): void {
-        nconf.set('google_username', value);
-        this.save();
+        this.save('google_username', value);
     }
 
     getGooglePassword(): string {
-        return nconf.get('google_password');
+        return this.get('google_password');
     }
 
     setGooglePassword(value: string): void {
-        nconf.set('google_password', value);
-        this.save();
+        this.save('google_password', value);
     }
 
     getDirbleToken(): string {
-        return nconf.get('dirble_token');
+        return this.get('dirble_token');
     }
 
     setDirbleToken(value: string): void {
-        nconf.set('dirble_token', value);
-        this.save();
+        this.save('dirble_token', value);
     }
 
     isMpv(): boolean {
-        return nconf.get('executor') === "mpv";
+        return this.get('executor') === "mpv";
     }
 
-    private save() {
+    private save(param: string, value: string) {
+        nconf.set(param, value);
         nconf.save(err => {
             console.log(err);
             fs.readFile(this.configPath, function (err, data) {});

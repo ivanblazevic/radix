@@ -9,30 +9,23 @@ class Config {
     constructor() {
         this.configPath = path.join(__dirname, './../config.json');
         this.packagePath = path.join(__dirname, './../package.json');
-        const config = this.configPath;
-        const defaultConfig = {
+        this.defaultConfig = {
             "mixer": "PCM",
             "executor": "mpc",
             "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
-            "title": "AlternativeFM"
+            "title": "AlternativeFM",
+            "volume": 50
         };
-        fs.readFile(config, "utf8", function (err, file) {
-            if (err) {
-                fs.writeFile(config, JSON.stringify(defaultConfig), function (err) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    nconf.argv()
-                        .env()
-                        .file({ file: config });
-                });
-            }
-            else {
-                nconf.argv()
-                    .env()
-                    .file({ file: config });
-            }
-        });
+        if (!fs.existsSync(this.configPath)) {
+            fs.writeFileSync(this.configPath, JSON.stringify(this.defaultConfig));
+        }
+        nconf
+            .argv()
+            .env()
+            .file({ file: this.configPath });
+    }
+    get(param) {
+        return nconf.get(param);
     }
     getVersion() {
         var content = fs.readFileSync(this.packagePath, 'utf8');
@@ -54,54 +47,53 @@ class Config {
         });
     }
     getMixer() {
-        return nconf.get('mixer') || 'PCM';
+        return this.get('mixer') || 'PCM';
     }
     getVolume() {
-        return +nconf.get('volume');
+        const volume = this.get('volume');
+        if (!volume) {
+            return 50;
+        }
+        return +volume;
     }
     setVolume(volume) {
-        nconf.set('volume', volume);
-        this.save();
+        this.save('volume', volume);
     }
     getStreamingUrl() {
-        return nconf.get('url');
+        return this.get('url');
     }
     setStreamingUrl(url) {
-        nconf.set('url', url);
-        this.save();
+        this.save('url', url);
     }
     getTitle() {
-        return nconf.get('title');
+        return this.get('title');
     }
     setTitle(title) {
-        nconf.set('title', title);
-        this.save();
+        this.save('title', title);
     }
     getGoogleUsername() {
-        return nconf.get('google_username');
+        return this.get('google_username');
     }
     setGoogleUsername(value) {
-        nconf.set('google_username', value);
-        this.save();
+        this.save('google_username', value);
     }
     getGooglePassword() {
-        return nconf.get('google_password');
+        return this.get('google_password');
     }
     setGooglePassword(value) {
-        nconf.set('google_password', value);
-        this.save();
+        this.save('google_password', value);
     }
     getDirbleToken() {
-        return nconf.get('dirble_token');
+        return this.get('dirble_token');
     }
     setDirbleToken(value) {
-        nconf.set('dirble_token', value);
-        this.save();
+        this.save('dirble_token', value);
     }
     isMpv() {
-        return nconf.get('executor') === "mpv";
+        return this.get('executor') === "mpv";
     }
-    save() {
+    save(param, value) {
+        nconf.set(param, value);
         nconf.save(err => {
             console.log(err);
             fs.readFile(this.configPath, function (err, data) { });
