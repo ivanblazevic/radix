@@ -120,6 +120,7 @@ export class Config {
 
     private save() {
         nconf.save(err => {
+            console.log(err);
             fs.readFile(this.configPath, function (err, data) {});
         });
     }
