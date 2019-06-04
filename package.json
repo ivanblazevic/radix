@@ -1,11 +1,12 @@
 {
   "name": "radix-player",
-  "version": "1.2.23",
+  "version": "2.0.0",
   "description": "Internet Radio Streamer",
   "main": "Radix",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node-dev ./bin/www"
+    "start": "node-dev ./bin/www",
+    "dev": "tsc-watch --onSuccess 'node ./bin/www' --onFailure 'echo Beep! Compilation Failed' --compiler typescript/bin/tsc"
   },
   "bin": {
     "radix-install": "./install.js",
@@ -22,20 +23,21 @@
   "author": "Ivan Blazevic",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^9.6.1",
     "child_process": "^1.0.2",
     "express": "^4.16.2",
     "fs": "0.0.1-security",
     "nconf": "^0.9.1",
     "playmusic": "^2.3.0",
-    "request": "^2.85.0",
+    "request": "^2.88.0",
     "rxjs": "^6.3.2",
     "rxjs-compat": "^6.3.2",
     "shelljs": "^0.8.2",
-    "typescript": "^2.8.1",
     "ytdl-core": "^0.20.2"
   },
   "devDependencies": {
-    "node-dev": "^3.1.3"
+    "@types/node": "^9.6.1",
+    "node-dev": "^3.1.3",
+    "tsc-watch": "^2.2.1",
+    "typescript": "^3.4.5"
   }
 }

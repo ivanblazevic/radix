@@ -18,3 +18,6 @@ Download DietPi / Recommended Etcher for flashing SD card > and flash your SD ca
 
 ## Optional: Update to latest version
 - Update to new version will appear in settings of the web interface
+
+## Errors
+- If radix does not autostart, add it manually to /etc/rc.local > just enter radix before exit command
