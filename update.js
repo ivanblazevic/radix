@@ -2,5 +2,5 @@
 "use strict";
 
 const shell = require('shelljs');
-shell.exec('npm update -g radix-player')
+shell.exec('npm install -g radix-player')
 shell.exec('sleep 2 ; reboot')
