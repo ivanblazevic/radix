@@ -64,6 +64,6 @@ export class Player {
 
 	setDefaultVolume(): Observable<any> {
 		return this.volume(this.config.getVolume())
-    }
+  }
 
 }
