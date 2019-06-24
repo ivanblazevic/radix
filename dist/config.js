@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const nconf = require("nconf");
 const fs = require("fs");
+const nconf = require("nconf");
 const path = require("path");
-const Observable_1 = require("rxjs/Observable");
 const request = require("request");
+const Observable_1 = require("rxjs/Observable");
 class Config {
     constructor() {
-        this.configPath = path.join(__dirname, './../config.json');
+        this.configPath = path.join('./config.json');
         this.packagePath = path.join(__dirname, './../package.json');
         this.defaultConfig = {
             "mixer": "PCM",

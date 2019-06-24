@@ -1,11 +1,11 @@
-import * as nconf from 'nconf';
 import * as fs from 'fs';
+import * as nconf from 'nconf';
 import * as path from 'path';
-import { Observable } from 'rxjs/Observable';
 import * as request from 'request';
+import { Observable } from 'rxjs/Observable';
 
 export class Config {
-    private configPath = path.join(__dirname, './../config.json');
+    private configPath = path.join('./config.json');
     private packagePath = path.join(__dirname, './../package.json');
     private defaultConfig = {
         "mixer": "PCM",
