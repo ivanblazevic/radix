@@ -6,12 +6,59 @@ const indexRoute = require("./routes/index");
 const googleMusicPlayRoute = require("./routes/google-music-play");
 const config_1 = require("./config");
 const player_1 = require("./player");
+const remote_1 = require("./remote");
+var usb = require('usb');
 /**
  * The server.
  *
  * @class Server
  */
 class Server {
+    /**
+     * Constructor.
+     *
+     * @class Server
+     * @constructor
+     */
+    constructor() {
+        this.onListening = (event) => {
+            this.configuration = new config_1.Config();
+            var player = new player_1.Player();
+            var url = this.configuration.getStreamingUrl();
+            if (this.configuration.get("hasRemote")) {
+                this.initRemote();
+            }
+            // force default radio stream if GoogleMusicPlay was last used; url has expirantion that therefore is not able to be sed again
+            if (!!url && url.indexOf("googleusercontent") > -1) {
+                url = null;
+            }
+            var title;
+            if (!url) {
+                url = "http://178.32.62.172:8878/;";
+            }
+            else {
+                url = decodeURI(url);
+                title = this.configuration.getTitle();
+            }
+            if (!this.configuration.get("isMock")) {
+                player.setDefaultVolume().subscribe(res => {
+                    console.log("Default volume set to: ", res + "%");
+                    player.play(url, title).subscribe(res => {
+                        console.log(res);
+                    }, err => {
+                        console.error(err);
+                    });
+                }, err => {
+                    console.error(err);
+                });
+            }
+        };
+        //create expressjs application
+        this.app = express();
+        //configure application
+        this.config();
+        this.routes();
+    }
     /**
      * Bootstrap the application.
      *
@@ -23,31 +70,28 @@ class Server {
     static bootstrap() {
         return new Server();
     }
-    onListening(event) {
-        this.configuration = new config_1.Config();
-        var player = new player_1.Player();
-        var url = this.configuration.getStreamingUrl();
-        // force default radio stream if GoogleMusicPlay was last used; url has expirantion that therefore is not able to be sed again
-        if (!!url && url.indexOf("googleusercontent") > -1) {
-            url = null;
-        }
-        var title;
-        if (!url) {
-            url = "http://178.32.62.172:8878/;";
-        }
-        else {
-            url = decodeURI(url);
-            title = this.configuration.getTitle();
-        }
-        player.setDefaultVolume().subscribe(res => {
-            console.log("Default volume set to: ", res + "%");
-            player.play(url, title).subscribe(res => {
-                console.log(res);
-            }, err => {
-                console.error(err);
-            });
-        }, err => {
-            console.error(err);
+    initRemote() {
+        var remote = new remote_1.Remote(this.configuration.get("isMock"));
+        remote.on((error, data) => {
+            if (error) {
+                throw new Error(error);
+            }
+            switch (data) {
+                case remote_1.RemoteKey.DOWN:
+                    console.log("down");
+                    break;
+                case remote_1.RemoteKey.UP:
+                    console.log("up");
+                    break;
+                case remote_1.RemoteKey.LEFT:
+                    console.log("left");
+                    break;
+                case remote_1.RemoteKey.RIGHT:
+                    console.log("right");
+                    break;
+                default:
+                    break;
+            }
         });
     }
     onError(error) {
@@ -73,19 +117,6 @@ class Server {
             default:
                 throw error;
         }
-    }
-    /**
-     * Constructor.
-     *
-     * @class Server
-     * @constructor
-     */
-    constructor() {
-        //create expressjs application
-        this.app = express();
-        //configure application
-        this.config();
-        this.routes();
     }
     /**
      * Configure application
