@@ -18,6 +18,9 @@ type RemoteEvent = (error: string, data: RemoteKey) => void;
 
 export class Remote {
 
+    private idVendor = 9354;
+    private idProduct = 5774;
+
     config: Config;
     callback: RemoteEvent;
 
@@ -26,7 +29,7 @@ export class Remote {
         
         // const a = usb.getDeviceList()
         
-        const device = isMocked ? this.getDeviceMock() : usb.findByIds(9354, 5774)
+        const device = isMocked ? this.getDeviceMock() : usb.findByIds(this.idVendor, this.idProduct);
         device.open();
 
         const i = device.interfaces[1];
@@ -66,9 +69,9 @@ export class Remote {
         const on = (type: 'error' | 'data', call) => {
             setTimeout(() => {
                 if (type === "data") {
-                    call(["", "", "80"]);
+                    call(["", "", "51"]);
                 }
-            }, 100)
+            }, 4000)
         }
 
         const i = {

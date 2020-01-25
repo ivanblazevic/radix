@@ -1,6 +1,6 @@
 {
   "name": "radix-player",
-  "version": "2.1.6",
+  "version": "2.2.0",
   "description": "Internet Radio Streamer",
   "main": "Radix",
   "scripts": {
@@ -29,6 +29,7 @@
     "nconf": "^0.9.1",
     "playmusic": "^2.3.0",
     "request": "^2.88.0",
+    "request-promise": "^4.2.5",
     "rxjs": "^6.3.2",
     "rxjs-compat": "^6.3.2",
     "shelljs": "^0.8.2",

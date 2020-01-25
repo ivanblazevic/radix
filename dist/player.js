@@ -3,8 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const operators_1 = require("rxjs/operators");
 const config_1 = require("./config");
 const common_1 = require("./common");
+var request = require('request-promise');
 class Player {
     constructor() {
+        this.FAVORITES_HOST = "https://radix-83cd.restdb.io/rest/stations";
         this.info = () => {
             return {
                 "version": this.config.getVersion(),
@@ -36,10 +38,40 @@ class Player {
                 this.config.setVolume(volume);
             }));
         };
+        this.getStations = () => {
+            var options = {
+                url: this.FAVORITES_HOST,
+                headers: {
+                    'User-Agent': 'Request-Promise',
+                    'x-apikey': '5ae89d7625a622ae4d528762'
+                }
+            };
+            return request(options).then(response => {
+                return JSON.parse(response);
+            });
+        };
         this.config = new config_1.Config();
+        this.getStations().then(stations => {
+            this.stations = stations;
+        });
+    }
+    previous() {
+        const index = (idx) => idx === 0 ? idx : idx - 1;
+        this.onPreviousOrNext(index);
+    }
+    next() {
+        const index = (idx) => this.stations.length === idx + 1 ? idx : idx + 1;
+        this.onPreviousOrNext(index);
     }
     setDefaultVolume() {
         return this.volume(this.config.getVolume());
+    }
+    onPreviousOrNext(index) {
+        const currentIdx = this.stations.findIndex(s => this.info().url === s.url);
+        const nextStation = this.stations[index(currentIdx)];
+        this.play(nextStation.url, nextStation.title).subscribe(r => {
+            console.log(r);
+        });
     }
 }
 exports.Player = Player;

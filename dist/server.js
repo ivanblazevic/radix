@@ -7,7 +7,6 @@ const googleMusicPlayRoute = require("./routes/google-music-play");
 const config_1 = require("./config");
 const player_1 = require("./player");
 const remote_1 = require("./remote");
-var usb = require('usb');
 /**
  * The server.
  *
@@ -23,7 +22,7 @@ class Server {
     constructor() {
         this.onListening = (event) => {
             this.configuration = new config_1.Config();
-            var player = new player_1.Player();
+            this.player = new player_1.Player();
             var url = this.configuration.getStreamingUrl();
             if (this.configuration.get("hasRemote")) {
                 this.initRemote();
@@ -41,9 +40,9 @@ class Server {
                 title = this.configuration.getTitle();
             }
             if (!this.configuration.get("isMock")) {
-                player.setDefaultVolume().subscribe(res => {
+                this.player.setDefaultVolume().subscribe(res => {
                     console.log("Default volume set to: ", res + "%");
-                    player.play(url, title).subscribe(res => {
+                    this.player.play(url, title).subscribe(res => {
                         console.log(res);
                     }, err => {
                         console.error(err);
@@ -84,10 +83,10 @@ class Server {
                     console.log("up");
                     break;
                 case remote_1.RemoteKey.LEFT:
-                    console.log("left");
+                    this.player.previous();
                     break;
                 case remote_1.RemoteKey.RIGHT:
-                    console.log("right");
+                    this.player.next();
                     break;
                 default:
                     break;

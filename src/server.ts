@@ -8,9 +8,6 @@ import { Config } from "./config";
 import { Player } from "./player";
 import { Remote, RemoteKey } from "./remote";
 
-var usb = require('usb')
-
-
 /**
  * The server.
  *
@@ -18,6 +15,8 @@ var usb = require('usb')
  */
 class Server {
   public app: express.Application;
+
+  private player: Player;
   private configuration: Config;
 
   /**
@@ -34,7 +33,7 @@ class Server {
 
   onListening = (event) => {
     this.configuration = new Config();
-    var player = new Player();
+    this.player = new Player();
     var url = this.configuration.getStreamingUrl();
 
     if (this.configuration.get("hasRemote")) {
@@ -55,9 +54,9 @@ class Server {
     }
 
     if (!this.configuration.get("isMock")) {
-      player.setDefaultVolume().subscribe(res => {
+      this.player.setDefaultVolume().subscribe(res => {
         console.log("Default volume set to: ", res + "%");
-        player.play(url, title).subscribe(res => {
+        this.player.play(url, title).subscribe(res => {
           console.log(res);
         }, err => {
           console.error(err)
@@ -85,10 +84,10 @@ class Server {
           console.log("up")
           break;
         case RemoteKey.LEFT:
-          console.log("left")
+          this.player.previous();
           break;
         case RemoteKey.RIGHT:
-          console.log("right")
+          this.player.next();
           break;
 
         default:

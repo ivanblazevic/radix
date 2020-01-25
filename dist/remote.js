@@ -17,12 +17,14 @@ var RemoteKey;
 })(RemoteKey = exports.RemoteKey || (exports.RemoteKey = {}));
 class Remote {
     constructor(isMocked) {
+        this.idVendor = 9354;
+        this.idProduct = 5774;
         this.on = (callback) => {
             this.callback = callback;
         };
         this.config = new config_1.Config();
         // const a = usb.getDeviceList()
-        const device = isMocked ? this.getDeviceMock() : usb.findByIds(9354, 5774);
+        const device = isMocked ? this.getDeviceMock() : usb.findByIds(this.idVendor, this.idProduct);
         device.open();
         const i = device.interfaces[1];
         if (i.isKernelDriverActive()) {
@@ -47,9 +49,9 @@ class Remote {
         const on = (type, call) => {
             setTimeout(() => {
                 if (type === "data") {
-                    call(["", "", "80"]);
+                    call(["", "", "51"]);
                 }
-            }, 100);
+            }, 4000);
         };
         const i = {
             claim: () => { },
