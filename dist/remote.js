@@ -1,19 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("./config");
-const usb = require('usb');
-/*
-80 left
-79 right
-52 up
-51 down
-*/
+const usb = require("usb");
 var RemoteKey;
 (function (RemoteKey) {
-    RemoteKey[RemoteKey["UP"] = 80] = "UP";
-    RemoteKey[RemoteKey["DOWN"] = 79] = "DOWN";
-    RemoteKey[RemoteKey["LEFT"] = 52] = "LEFT";
-    RemoteKey[RemoteKey["RIGHT"] = 51] = "RIGHT";
+    RemoteKey[RemoteKey["UP"] = 52] = "UP";
+    RemoteKey[RemoteKey["DOWN"] = 51] = "DOWN";
+    RemoteKey[RemoteKey["LEFT"] = 80] = "LEFT";
+    RemoteKey[RemoteKey["RIGHT"] = 79] = "RIGHT";
 })(RemoteKey = exports.RemoteKey || (exports.RemoteKey = {}));
 class Remote {
     constructor(isMocked) {
@@ -24,7 +18,9 @@ class Remote {
         };
         this.config = new config_1.Config();
         // const a = usb.getDeviceList()
-        const device = isMocked ? this.getDeviceMock() : usb.findByIds(this.idVendor, this.idProduct);
+        const device = isMocked
+            ? this.getDeviceMock()
+            : usb.findByIds(this.idVendor, this.idProduct);
         device.open();
         const i = device.interfaces[1];
         if (i.isKernelDriverActive()) {
@@ -33,12 +29,12 @@ class Remote {
         i.claim();
         const e = i.endpoints[0];
         e.startPoll(1, 0);
-        e.on('data', (data) => {
+        e.on("data", data => {
             let dataArr = Array.prototype.slice.call(new Uint8Array(data, 0, 8));
             const key = this.mapKey(dataArr[2]);
             this.callback(null, dataArr[2]);
         });
-        e.on('error', (error) => {
+        e.on("error", error => {
             console.log(error);
         });
     }
@@ -56,10 +52,12 @@ class Remote {
         const i = {
             claim: () => { },
             isKernelDriverActive: () => { },
-            endpoints: [{
+            endpoints: [
+                {
                     startPoll: () => { },
                     on: on
-                }]
+                }
+            ]
         };
         return {
             open: () => { },
