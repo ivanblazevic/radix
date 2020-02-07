@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const operators_1 = require("rxjs/operators");
 const config_1 = require("./config");
 const common_1 = require("./common");
-const rxjs_1 = require("rxjs");
 var request = require("request-promise");
 class Player {
     constructor() {
@@ -28,19 +27,18 @@ class Player {
             }
             else {
                 console.log('mpc add "' + streamUrl + '"');
-                return rxjs_1.of("a").pipe(operators_1.tap(_ => {
+                /*
+                return of("a").pipe(
+                  tap(r => {
+                    this.config.setStreamingUrl(streamUrl);
+                    this.config.setTitle(title);
+                  })
+                );
+                */
+                return common_1.run("mpc clear").pipe(operators_1.switchMap(r => common_1.run('mpc add "' + streamUrl + '"')), operators_1.switchMap(r => common_1.run("mpc play")), operators_1.tap(r => {
+                    this.config.setStreamingUrl(streamUrl);
                     this.config.setTitle(title);
                 }));
-                /*
-                      return run("mpc clear").pipe(
-                          switchMap(r => run('mpc add "' + streamUrl + '"')),
-                          switchMap(r => run("mpc play")),
-                          tap(r => {
-                              this.config.setStreamingUrl(streamUrl);
-                              this.config.setTitle(title);
-                          })
-                )
-                */
             }
         };
         this.volume = (volume) => {
