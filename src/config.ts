@@ -3,6 +3,7 @@ import * as nconf from "nconf";
 import * as path from "path";
 import * as request from "request";
 import { Observable } from "rxjs/Observable";
+import { WebSocketHelper } from "./ws";
 
 export class Config {
   private configPath = path.join("./config.json");
@@ -27,6 +28,8 @@ export class Config {
       .argv()
       .env()
       .file({ file: this.configPath });
+
+    this.ws = new WebSocketHelper(this.get("ws"), this.getTitle());
   }
 
   get(param: string): any {

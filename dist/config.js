@@ -5,16 +5,18 @@ const nconf = require("nconf");
 const path = require("path");
 const request = require("request");
 const Observable_1 = require("rxjs/Observable");
+const ws_1 = require("./ws");
 class Config {
     constructor() {
-        this.configPath = path.join('./config.json');
-        this.packagePath = path.join(__dirname, './../package.json');
+        this.configPath = path.join("./config.json");
+        this.packagePath = path.join(__dirname, "./../package.json");
         this.defaultConfig = {
-            "mixer": "PCM",
-            "executor": "mpc",
-            "url": "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
-            "title": "AlternativeFM",
-            "volume": 50
+            mixer: "PCM",
+            executor: "mpc",
+            url: "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
+            title: "AlternativeFM",
+            volume: 50,
+            ws: "localhost"
         };
         if (!fs.existsSync(this.configPath)) {
             fs.writeFileSync(this.configPath, JSON.stringify(this.defaultConfig));
@@ -23,18 +25,19 @@ class Config {
             .argv()
             .env()
             .file({ file: this.configPath });
+        this.ws = new ws_1.WebSocketHelper(this.get("ws"), this.getTitle());
     }
     get(param) {
         return nconf.get(param);
     }
     getVersion() {
-        var content = fs.readFileSync(this.packagePath, 'utf8');
+        var content = fs.readFileSync(this.packagePath, "utf8");
         var o = JSON.parse(content);
         return o.version;
     }
     getAvailableVersion() {
         return new Observable_1.Observable(observer => {
-            request.get('https://registry.npmjs.org/radix-player', function (error, response, body) {
+            request.get("https://registry.npmjs.org/radix-player", function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     const b = JSON.parse(body);
                     observer.next(b["dist-tags"].latest);
@@ -47,50 +50,51 @@ class Config {
         });
     }
     getMixer() {
-        return this.get('mixer') || 'PCM';
+        return this.get("mixer") || "PCM";
     }
     getVolume() {
-        const volume = this.get('volume');
+        const volume = this.get("volume");
         if (!volume) {
             return 50;
         }
         return +volume;
     }
     setVolume(volume) {
-        this.save('volume', volume.toString());
+        this.save("volume", volume.toString());
     }
     getStreamingUrl() {
-        return this.get('url');
+        return this.get("url");
     }
     setStreamingUrl(url) {
-        this.save('url', url);
+        this.save("url", url);
     }
     getTitle() {
-        return this.get('title');
+        return this.get("title");
     }
     setTitle(title) {
-        this.save('title', title);
+        this.save("title", title);
+        this.ws.send(title);
     }
     getGoogleUsername() {
-        return this.get('google_username');
+        return this.get("google_username");
     }
     setGoogleUsername(value) {
-        this.save('google_username', value);
+        this.save("google_username", value);
     }
     getGooglePassword() {
-        return this.get('google_password');
+        return this.get("google_password");
     }
     setGooglePassword(value) {
-        this.save('google_password', value);
+        this.save("google_password", value);
     }
     getDirbleToken() {
-        return this.get('dirble_token');
+        return this.get("dirble_token");
     }
     setDirbleToken(value) {
-        this.save('dirble_token', value);
+        this.save("dirble_token", value);
     }
     isMpv() {
-        return this.get('executor') === "mpv";
+        return this.get("executor") === "mpv";
     }
     save(param, value) {
         nconf.set(param, value);

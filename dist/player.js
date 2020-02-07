@@ -3,19 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const operators_1 = require("rxjs/operators");
 const config_1 = require("./config");
 const common_1 = require("./common");
-var request = require('request-promise');
+const rxjs_1 = require("rxjs");
+var request = require("request-promise");
 class Player {
     constructor() {
         this.FAVORITES_HOST = "https://radix-83cd.restdb.io/rest/stations";
         this.info = () => {
             return {
-                "version": this.config.getVersion(),
-                "url": this.config.getStreamingUrl(),
-                "title": this.config.getTitle(),
-                "volume": this.config.getVolume() || 0,
-                "google_username": this.config.getGoogleUsername(),
-                "google_password": this.config.getGooglePassword(),
-                "dirble_token": this.config.getDirbleToken()
+                version: this.config.getVersion(),
+                url: this.config.getStreamingUrl(),
+                title: this.config.getTitle(),
+                volume: this.config.getVolume() || 0,
+                google_username: this.config.getGoogleUsername(),
+                google_password: this.config.getGooglePassword(),
+                dirble_token: this.config.getDirbleToken()
             };
         };
         this.play = (streamUrl, title) => {
@@ -27,10 +28,19 @@ class Player {
             }
             else {
                 console.log('mpc add "' + streamUrl + '"');
-                return common_1.run("mpc clear").pipe(operators_1.switchMap(r => common_1.run('mpc add "' + streamUrl + '"')), operators_1.switchMap(r => common_1.run("mpc play")), operators_1.tap(r => {
-                    this.config.setStreamingUrl(streamUrl);
+                return rxjs_1.of("a").pipe(operators_1.tap(_ => {
                     this.config.setTitle(title);
                 }));
+                /*
+                      return run("mpc clear").pipe(
+                          switchMap(r => run('mpc add "' + streamUrl + '"')),
+                          switchMap(r => run("mpc play")),
+                          tap(r => {
+                              this.config.setStreamingUrl(streamUrl);
+                              this.config.setTitle(title);
+                          })
+                )
+                */
             }
         };
         this.volume = (volume) => {
@@ -42,8 +52,8 @@ class Player {
             var options = {
                 url: this.FAVORITES_HOST,
                 headers: {
-                    'User-Agent': 'Request-Promise',
-                    'x-apikey': '5ae89d7625a622ae4d528762'
+                    "User-Agent": "Request-Promise",
+                    "x-apikey": "5ae89d7625a622ae4d528762"
                 }
             };
             return request(options).then(response => {
@@ -56,11 +66,11 @@ class Player {
         });
     }
     previous() {
-        const index = (idx) => idx === 0 ? idx : idx - 1;
+        const index = idx => (idx === 0 ? idx : idx - 1);
         this.onPreviousOrNext(index);
     }
     next() {
-        const index = (idx) => this.stations.length === idx + 1 ? idx : idx + 1;
+        const index = idx => (this.stations.length === idx + 1 ? idx : idx + 1);
         this.onPreviousOrNext(index);
     }
     setDefaultVolume() {
