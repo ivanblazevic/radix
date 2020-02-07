@@ -60,22 +60,14 @@ export class Player {
     } else {
       console.log('mpc add "' + streamUrl + '"');
 
-      return of("a").pipe(
-        tap(_ => {
+      return run("mpc clear").pipe(
+        switchMap(r => run('mpc add "' + streamUrl + '"')),
+        switchMap(r => run("mpc play")),
+        tap(r => {
+          this.config.setStreamingUrl(streamUrl);
           this.config.setTitle(title);
         })
       );
-
-      /*
-			return run("mpc clear").pipe(
-				switchMap(r => run('mpc add "' + streamUrl + '"')),
-				switchMap(r => run("mpc play")),
-				tap(r => {
-					this.config.setStreamingUrl(streamUrl);
-					this.config.setTitle(title);
-				})
-      )
-      */
     }
   };
 
