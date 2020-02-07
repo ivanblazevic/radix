@@ -20,9 +20,9 @@ export class Config {
             fs.writeFileSync(this.configPath, JSON.stringify(this.defaultConfig));
         }
         nconf
-        .argv()
-        .env()
-        .file({ file: this.configPath });
+            .argv()
+            .env()
+            .file({ file: this.configPath });
     }
 
     get(param: string): any {
@@ -38,7 +38,7 @@ export class Config {
     getAvailableVersion(): Observable<string> {
         return new Observable(observer => {
             request.get('https://registry.npmjs.org/radix-player',
-                function (error, response, body) {                
+                function (error, response, body) {
                     if (!error && response.statusCode == 200) {
                         const b = JSON.parse(body);
                         observer.next(b["dist-tags"].latest);
@@ -115,7 +115,7 @@ export class Config {
         nconf.set(param, value);
         nconf.save(err => {
             console.log(err);
-            fs.readFile(this.configPath, function (err, data) {});
+            fs.readFile(this.configPath, function (err, data) { });
         });
     }
 
