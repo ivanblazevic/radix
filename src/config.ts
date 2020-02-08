@@ -37,15 +37,19 @@ export class Config {
 
     const Parser = require("icecast-parser");
 
-    this.radioStation = new Parser(this.getStreamingUrl());
+    this.radioStation = new Parser({
+      url: this.getStreamingUrl(),
+      metadataInterval: 20,
+      errorInterval: 20
+    });
 
     this.radioStation.on("metadata", metadata => {
       if (this.currentSong !== metadata.StreamTitle) {
         this.currentSong = metadata.StreamTitle;
-
         console.log("New song: ", this.currentSong);
-        this.ws.send(this.currentSong);
       }
+
+      this.ws.send(this.currentSong);
 
       console.log(
         [
@@ -112,10 +116,7 @@ export class Config {
   setStreamingUrl(url: string): void {
     this.save("url", url);
     console.log("change", url);
-
-    try {
-      this.radioStation.setConfig({ ...this.radioStation.getConfig(), url });
-    } catch (error) {}
+    this.radioStation.setConfig({ ...this.radioStation.getConfig(), url });
   }
 
   getTitle(): string {
