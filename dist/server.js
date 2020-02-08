@@ -20,9 +20,9 @@ class Server {
      * @constructor
      */
     constructor() {
-        this.onListening = (event) => {
-            this.configuration = new config_1.Config();
-            this.player = new player_1.Player();
+        this.configuration = new config_1.Config();
+        this.onListening = event => {
+            this.player = new player_1.Player(this.configuration);
             var url = this.configuration.getStreamingUrl();
             if (this.configuration.get("hasRemote")) {
                 this.initRemote();
@@ -132,10 +132,10 @@ class Server {
         //mount query string parser
         this.app.use(bodyParser.urlencoded({ extended: true }));
         var allowCrossDomain = function (req, res, next) {
-            res.header('Access-Control-Allow-Origin', '*');
-            res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-            res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-            if ('OPTIONS' == req.method) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+            res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, Content-Length, X-Requested-With");
+            if ("OPTIONS" == req.method) {
                 res.sendStatus(200);
             }
             else {
@@ -144,7 +144,7 @@ class Server {
         };
         this.app.use(allowCrossDomain);
         //add static paths
-        this.app.use(express.static(path.join(__dirname, './../www')));
+        this.app.use(express.static(path.join(__dirname, "./../www")));
         // catch 404 and forward to error handler
         this.app.use(function (err, req, res, next) {
             var error = new Error("Not Found");
@@ -164,7 +164,7 @@ class Server {
         let router;
         router = express.Router();
         //create routes
-        var index = new indexRoute.Index();
+        var index = new indexRoute.Index(this.configuration);
         //home page
         router.post("/", index.saveConfig.bind(index.saveConfig));
         router.get("/info", index.index.bind(index.index));
@@ -175,7 +175,7 @@ class Server {
         router.get("/youtube", index.youtube.bind(index.youtube));
         router.get("/search", index.search.bind(index.search));
         // google music play
-        var google = new googleMusicPlayRoute.GoogleMusicPlay();
+        var google = new googleMusicPlayRoute.GoogleMusicPlay(this.configuration);
         router.get("/gplay", google.play.bind(google.play));
         router.get("/gplay/search", google.search.bind(google.search));
         router.get("/gplay/library", google.library.bind(google.library));

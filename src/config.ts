@@ -19,8 +19,12 @@ export class Config {
   };
 
   private ws;
+  private radioStation;
+  private currentSong;
 
   constructor() {
+    console.log("Load configuration...");
+
     if (!fs.existsSync(this.configPath)) {
       fs.writeFileSync(this.configPath, JSON.stringify(this.defaultConfig));
     }
@@ -30,6 +34,31 @@ export class Config {
       .file({ file: this.configPath });
 
     this.ws = new WebSocketHelper(this.get("ws"), this.getTitle());
+
+    const Parser = require("icecast-parser");
+
+    this.radioStation = new Parser(this.getStreamingUrl());
+
+    this.radioStation.on("metadata", metadata => {
+      if (this.currentSong !== metadata.StreamTitle) {
+        this.currentSong = metadata.StreamTitle;
+
+        console.log("New song: ", this.currentSong);
+        this.ws.send(this.currentSong);
+      }
+
+      console.log(
+        [
+          metadata.StreamTitle,
+          "is playing on",
+          this.radioStation.getConfig("url")
+        ].join(" ")
+      );
+    });
+
+    this.radioStation.on("error", function(err) {
+      console.log(err);
+    });
   }
 
   get(param: string): any {
@@ -82,6 +111,11 @@ export class Config {
 
   setStreamingUrl(url: string): void {
     this.save("url", url);
+    console.log("change", url);
+
+    try {
+      this.radioStation.setConfig({ ...this.radioStation.getConfig(), url });
+    } catch (error) {}
   }
 
   getTitle(): string {

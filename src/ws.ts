@@ -25,7 +25,8 @@ export class WebSocketHelper {
 
     socket.on("open", () => {
       try {
-        socket.send(text.substring(0, 8).toUpperCase());
+        // .substring(0, 8)
+        socket.send(text.toUpperCase());
       } catch (error) {
         console.log(error);
       }

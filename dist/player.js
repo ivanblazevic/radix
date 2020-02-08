@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const operators_1 = require("rxjs/operators");
-const config_1 = require("./config");
 const common_1 = require("./common");
+const rxjs_1 = require("rxjs");
 var request = require("request-promise");
 class Player {
-    constructor() {
+    constructor(config) {
+        this.config = config;
         this.FAVORITES_HOST = "https://radix-83cd.restdb.io/rest/stations";
         this.info = () => {
             return {
@@ -25,16 +26,13 @@ class Player {
                     this.config.setTitle(title);
                 }));
             }
-            else {
-                console.log('mpc add "' + streamUrl + '"');
-                /*
-                return of("a").pipe(
-                  tap(r => {
+            else if (this.config.get("executor") === "test") {
+                return rxjs_1.of("a").pipe(operators_1.tap(r => {
                     this.config.setStreamingUrl(streamUrl);
                     this.config.setTitle(title);
-                  })
-                );
-                */
+                }));
+            }
+            else {
                 return common_1.run("mpc clear").pipe(operators_1.switchMap(r => common_1.run('mpc add "' + streamUrl + '"')), operators_1.switchMap(r => common_1.run("mpc play")), operators_1.tap(r => {
                     this.config.setStreamingUrl(streamUrl);
                     this.config.setTitle(title);
@@ -58,7 +56,6 @@ class Player {
                 return JSON.parse(response);
             });
         };
-        this.config = new config_1.Config();
         this.getStations().then(stations => {
             this.stations = stations;
         });

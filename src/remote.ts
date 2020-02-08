@@ -1,4 +1,3 @@
-import { Config } from "./config";
 import usb = require("usb");
 
 export enum RemoteKey {
@@ -13,15 +12,10 @@ type RemoteEvent = (error: string, data: RemoteKey) => void;
 export class Remote {
   private idVendor = 9354;
   private idProduct = 5774;
-
-  config: Config;
   callback: RemoteEvent;
 
   constructor(isMocked?: boolean) {
-    this.config = new Config();
-
     // const a = usb.getDeviceList()
-
     const device = isMocked
       ? this.getDeviceMock()
       : usb.findByIds(this.idVendor, this.idProduct);

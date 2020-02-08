@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_1 = require("./config");
 const usb = require("usb");
 var RemoteKey;
 (function (RemoteKey) {
@@ -16,7 +15,6 @@ class Remote {
         this.on = (callback) => {
             this.callback = callback;
         };
-        this.config = new config_1.Config();
         // const a = usb.getDeviceList()
         const device = isMocked
             ? this.getDeviceMock()

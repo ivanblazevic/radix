@@ -2,16 +2,15 @@
 const player_1 = require("../player");
 const child_process = require("child_process");
 const Observable_1 = require("rxjs/Observable");
-const config_1 = require("../config");
-var request = require('request');
+var request = require("request");
 var Route;
 (function (Route) {
     class Index {
-        constructor() {
-            this.player = new player_1.Player();
+        constructor(config) {
+            this.config = config;
             this.update = (req, res, next) => {
                 console.log("Update process started...");
-                child_process.exec('radix-update', (err, stdout) => {
+                child_process.exec("radix-update", (err, stdout) => {
                     if (err) {
                         res.send(JSON.stringify(err));
                     }
@@ -36,15 +35,17 @@ var Route;
             };
             this.youtube = (req, res, next) => {
                 const v = req.query.id;
-                const fs = require('fs');
-                const ytdl = require('ytdl-core');
+                const fs = require("fs");
+                const ytdl = require("ytdl-core");
                 const urlPipe = new Observable_1.Observable(observer => {
-                    ytdl('http://www.youtube.com/watch?v=' + v, { filter: (format) => {
+                    ytdl("http://www.youtube.com/watch?v=" + v, {
+                        filter: format => {
                             console.log(format);
                             observer.next(format.url);
                             observer.complete();
                             return format === format;
-                        } });
+                        }
+                    });
                 });
                 urlPipe.subscribe(url => {
                     this.player.play(url.toString()).subscribe(r => {
@@ -58,15 +59,18 @@ var Route;
                 var station = req.query.url;
                 var title = req.query.title;
                 this.player.play(station, title).subscribe(r => {
-                    res.send(JSON.stringify({ "result": r }));
+                    res.send(JSON.stringify({ result: r }));
                 }, err => {
                     res.status(400);
-                    res.send(JSON.stringify({ "error": err.toString() }));
+                    res.send(JSON.stringify({ error: err.toString() }));
                 });
             };
             this.search = (req, res, next) => {
                 var query = req.query.query;
-                request.post('http://api.dirble.com/v2/search?query=' + query + '&token=' + this.config.getDirbleToken(), { json: { key: 'value' } }, function (error, response, body) {
+                request.post("http://api.dirble.com/v2/search?query=" +
+                    query +
+                    "&token=" +
+                    this.config.getDirbleToken(), { json: { key: "value" } }, function (error, response, body) {
                     if (!error && response.statusCode == 200) {
                         res.send(body.map(i => {
                             return {
@@ -83,13 +87,13 @@ var Route;
             this.volume = (req, res, next) => {
                 var volume = req.query.set;
                 this.player.volume(volume).subscribe(r => {
-                    res.send(JSON.stringify({ "result": r }));
+                    res.send(JSON.stringify({ result: r }));
                 }, err => {
                     res.status(400);
-                    res.send(JSON.stringify({ "error": err.toString() }));
+                    res.send(JSON.stringify({ error: err.toString() }));
                 });
             };
-            this.config = new config_1.Config();
+            this.player = new player_1.Player(this.config);
         }
     }
     Route.Index = Index;

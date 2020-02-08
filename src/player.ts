@@ -27,11 +27,7 @@ export class Player {
   private FAVORITES_HOST = "https://radix-83cd.restdb.io/rest/stations";
   private stations: Item[];
 
-  config: Config;
-
-  constructor() {
-    this.config = new Config();
-
+  constructor(private config: Config) {
     this.getStations().then(stations => {
       this.stations = stations;
     });
@@ -57,18 +53,14 @@ export class Player {
           this.config.setTitle(title);
         })
       );
-    } else {
-      console.log('mpc add "' + streamUrl + '"');
-
-      /*
+    } else if (this.config.get("executor") === "test") {
       return of("a").pipe(
         tap(r => {
           this.config.setStreamingUrl(streamUrl);
           this.config.setTitle(title);
         })
       );
-      */
-
+    } else {
       return run("mpc clear").pipe(
         switchMap(r => run('mpc add "' + streamUrl + '"')),
         switchMap(r => run("mpc play")),
