@@ -37,10 +37,11 @@ export class Config {
 
     const Parser = require("icecast-parser");
 
+    /*
     this.radioStation = new Parser({
       url: this.getStreamingUrl(),
       metadataInterval: 20,
-      errorInterval: 20
+      errorInterval: 40
     });
 
     this.radioStation.on("metadata", metadata => {
@@ -63,6 +64,7 @@ export class Config {
     this.radioStation.on("error", function(err) {
       console.log(err);
     });
+    */
   }
 
   get(param: string): any {
@@ -116,7 +118,7 @@ export class Config {
   setStreamingUrl(url: string): void {
     this.save("url", url);
     console.log("change", url);
-    this.radioStation.setConfig({ ...this.radioStation.getConfig(), url });
+    // this.radioStation.setConfig({ ...this.radioStation.getConfig(), url });
   }
 
   getTitle(): string {

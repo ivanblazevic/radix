@@ -25,6 +25,7 @@ class Server {
             this.player = new player_1.Player(this.configuration);
             var url = this.configuration.getStreamingUrl();
             if (this.configuration.get("hasRemote")) {
+                console.log("Has remote");
                 this.initRemote();
             }
             // force default radio stream if GoogleMusicPlay was last used; url has expirantion that therefore is not able to be sed again

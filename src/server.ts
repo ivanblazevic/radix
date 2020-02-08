@@ -35,6 +35,7 @@ class Server {
     var url = this.configuration.getStreamingUrl();
 
     if (this.configuration.get("hasRemote")) {
+      console.log("Has remote");
       this.initRemote();
     }
 

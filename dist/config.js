@@ -28,26 +28,34 @@ class Config {
             .file({ file: this.configPath });
         this.ws = new ws_1.WebSocketHelper(this.get("ws"), this.getTitle());
         const Parser = require("icecast-parser");
+        /*
         this.radioStation = new Parser({
-            url: this.getStreamingUrl(),
-            metadataInterval: 20,
-            errorInterval: 20
+          url: this.getStreamingUrl(),
+          metadataInterval: 20,
+          errorInterval: 40
         });
+    
         this.radioStation.on("metadata", metadata => {
-            if (this.currentSong !== metadata.StreamTitle) {
-                this.currentSong = metadata.StreamTitle;
-                console.log("New song: ", this.currentSong);
-            }
-            this.ws.send(this.currentSong);
-            console.log([
-                metadata.StreamTitle,
-                "is playing on",
-                this.radioStation.getConfig("url")
-            ].join(" "));
+          if (this.currentSong !== metadata.StreamTitle) {
+            this.currentSong = metadata.StreamTitle;
+            console.log("New song: ", this.currentSong);
+          }
+    
+          this.ws.send(this.currentSong);
+    
+          console.log(
+            [
+              metadata.StreamTitle,
+              "is playing on",
+              this.radioStation.getConfig("url")
+            ].join(" ")
+          );
         });
-        this.radioStation.on("error", function (err) {
-            console.log(err);
+    
+        this.radioStation.on("error", function(err) {
+          console.log(err);
         });
+        */
     }
     get(param) {
         return nconf.get(param);
@@ -90,7 +98,7 @@ class Config {
     setStreamingUrl(url) {
         this.save("url", url);
         console.log("change", url);
-        this.radioStation.setConfig(Object.assign({}, this.radioStation.getConfig(), { url }));
+        // this.radioStation.setConfig({ ...this.radioStation.getConfig(), url });
     }
     getTitle() {
         return this.get("title");
