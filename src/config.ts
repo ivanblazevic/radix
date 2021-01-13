@@ -5,10 +5,21 @@ import * as request from "request";
 import { Observable } from "rxjs/Observable";
 import { WebSocketHelper } from "./ws";
 
+export interface IConfig {
+  hasRemote: boolean;
+  mixer: string;
+  executor: string;
+  url: string;
+  title: string;
+  volume: number;
+  ws: string;
+}
+
 export class Config {
   private configPath = path.join("./config.json");
   private packagePath = path.join(__dirname, "./../package.json");
-  private defaultConfig = {
+  private defaultConfig: IConfig = {
+    hasRemote: false,
     mixer: "PCM",
     executor: "mpc",
     url:

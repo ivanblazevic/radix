@@ -11,6 +11,7 @@ class Config {
         this.configPath = path.join("./config.json");
         this.packagePath = path.join(__dirname, "./../package.json");
         this.defaultConfig = {
+            hasRemote: false,
             mixer: "PCM",
             executor: "mpc",
             url: "http://alternativefm.cast.addradio.de/alternativefm/simulcast/high/stream.mp3",
